@@ -1,0 +1,43 @@
+{
+  "id": "AAA",
+  "magvar": -10,
+  "airports": [
+    {
+      "id": "KAAA",
+      "runways": true,
+      "symbol": false,
+      "centerlines": [
+        {
+          "runway": "RW04R",
+          "length": 10,
+          "fixes": ["APPAA", "APPBB", "APPCC"]
+        }
+      ]
+    },
+    {
+      "id": "KBBB",
+      "runways": true,
+      "symbol": true,
+      "centerlines": []
+    },
+    {
+      "id": "99A",
+      "runways": false,
+      "symbol": true,
+      "centerlines": []
+    }
+  ],
+  "fixes": [
+    {
+      "id": "FIXAA",
+      "defined_by": ["ZZZ", "QQQ"]
+    }
+  ],
+  "rnav_points": ["RNVAA", "RNVBB"],
+  "vors": [
+    { "id": "AAA", "innerOnly": true },
+    { "id": "QQQ", "innerOnly": false },
+    { "id": "ZZZ", "innerOnly": false }
+  ],
+  "restrictive": ["MOAZZ", "P9999", "R1"]
+}
