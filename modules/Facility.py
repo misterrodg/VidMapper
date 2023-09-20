@@ -1,6 +1,7 @@
 from modules.Airport import Airport
 from modules.CIFP import CIFP
 from modules.FileHandler import FileHandler
+from modules.VOR import VOR
 
 import json
 
@@ -19,6 +20,7 @@ class Facility:
         self.filePath = f"{FACILITY_DIR}/{id}.json"
         self.getFacilityData()
         self.checkAirports()
+        self.checkVORs()
 
     def getFacilityData(self):
         fh = FileHandler()
@@ -55,3 +57,16 @@ class Facility:
         if self.airports:
             for airport in self.airports:
                 airportData = Airport(airport)
+
+    def checkVORs(self):
+        cf = CIFP()
+        if self.vors:
+            vorIds = []
+            for vor in self.vors:
+                vorIds.append(vor["id"])
+            cf.checkForVORs(vorIds)
+
+    def drawVORs(self):
+        if self.vors:
+            for vor in self.vors:
+                vorData = VOR(vor)

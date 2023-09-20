@@ -1,4 +1,5 @@
 from modules.CIFPAirport import CIFPAirport
+from modules.CIFPVOR import CIFPVOR
 from modules.FileHandler import FileHandler
 
 # CIFP Data
@@ -18,6 +19,7 @@ CIFP_FIX_PREFIX = "SUSAE"
 class CIFP:
     def __init__(self):
         self.airportsToParse = []
+        self.vorsToParse = []
         self.checkDirectories()
 
     def checkDirectories(self):
@@ -50,3 +52,26 @@ class CIFP:
                             airportLines.append(line)
                     cifpAirport = CIFPAirport(airport, airportLines)
                     cifpAirport.toJsonFile(airportFile)
+
+    def checkForVORs(self, vors):
+        fh = FileHandler()
+        if vors:
+            for vor in vors:
+                vorFile = f"{VOR_DIR}/{vor}.json"
+                if not fh.checkFile(vorFile):
+                    self.vorsToParse.append(vor)
+        if self.vorsToParse:
+            self.parseVORs()
+
+    def parseVORs(self):
+        fh = FileHandler()
+        if fh.checkFile(CIFP_PATH):
+            with open(CIFP_PATH) as cifpFile:
+                cifpData = cifpFile.readlines()
+                for vor in self.vorsToParse:
+                    vorFile = f"{VOR_DIR}/{vor}.json"
+                    vorLine = f"{CIFP_NAVAID_PREFIX}        {vor}"
+                    for line in cifpData:
+                        if line.startswith(vorLine):
+                            cifpVor = CIFPVOR(vor, line)
+                            cifpVor.toJsonFile(vorFile)
