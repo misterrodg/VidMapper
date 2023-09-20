@@ -58,7 +58,7 @@ class Facility:
     def drawAirports(self):
         if self.airports:
             for airport in self.airports:
-                airportData = Airport(airport)
+                airportData = Airport(self.magvar, airport)
 
     def checkFixes(self):
         cf = CIFP()
@@ -71,7 +71,7 @@ class Facility:
     def drawFixes(self):
         if self.fixes:
             for fix in self.fixes:
-                fixData = Fix(fix)
+                fixData = Fix(self.magvar, fix)
 
     def checkVORs(self):
         cf = CIFP()
@@ -84,4 +84,4 @@ class Facility:
     def drawVORs(self):
         if self.vors:
             for vor in self.vors:
-                vorData = VOR(vor)
+                vorData = VOR(self.magvar, vor)
