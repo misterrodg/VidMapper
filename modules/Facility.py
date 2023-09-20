@@ -1,3 +1,5 @@
+from modules.Airport import Airport
+from modules.CIFP import CIFP
 from modules.FileHandler import FileHandler
 
 import json
@@ -16,6 +18,7 @@ class Facility:
         self.restrictive = None
         self.filePath = f"{FACILITY_DIR}/{id}.json"
         self.getFacilityData()
+        self.checkAirports()
 
     def getFacilityData(self):
         fh = FileHandler()
@@ -39,3 +42,16 @@ class Facility:
             print(
                 f"Follow the README to create the {self.id} facility file in {FACILITY_DIR}"
             )
+
+    def checkAirports(self):
+        cf = CIFP()
+        if self.airports:
+            airportIds = []
+            for airport in self.airports:
+                airportIds.append(airport["id"])
+            cf.checkForAirports(airportIds)
+
+    def drawAirports(self):
+        if self.airports:
+            for airport in self.airports:
+                airportData = Airport(airport)
