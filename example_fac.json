@@ -35,9 +35,9 @@
   ],
   "rnav_points": ["RNVAA", "RNVBB"],
   "vors": [
-    { "id": "AAA", "innerOnly": true },
-    { "id": "QQQ", "innerOnly": false },
-    { "id": "ZZZ", "innerOnly": false }
+    { "id": "AAA", "inner_only": true },
+    { "id": "QQQ", "inner_only": false },
+    { "id": "ZZZ", "inner_only": false }
   ],
   "restrictive": ["MOAZZ", "P9999", "R1"]
 }
