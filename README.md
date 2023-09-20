@@ -61,7 +61,7 @@ The fix object must contain the following sections, whether or not they contain 
 The VOR object must contain the following sections, whether or not they contain data:
 
 - `id`: The identifier for the VOR.
-- `innerOnly`: A boolean value that tells the script to print only the inner circle for the VOR. Useful for VORs at airports.
+- `inner_only`: A boolean value that tells the script to print only the inner circle for the VOR. Useful for VORs at airports.
 
 ## Drawing the Facility
 
