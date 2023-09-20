@@ -12,7 +12,7 @@ class VOR:
         self.innerOnly = False
         self.lat = None
         self.lon = None
-        self.filePath = f"{VOR_DIR}/{id}.json"
+        self.filePath = None
         # Drawn Data
         self.innerData = None
         self.outerData = None
@@ -23,6 +23,7 @@ class VOR:
         if vorObject:
             if "id" in vorObject:
                 self.id = vorObject["id"]
+                self.filePath = f"{VOR_DIR}/{self.id}.json"
             if "inner_only" in vorObject:
                 self.innerOnly = vorObject["inner_only"]
 

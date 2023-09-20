@@ -12,7 +12,7 @@ class Fix:
         self.definedBy = None
         self.lat = None
         self.lon = None
-        self.filePath = f"{FIX_DIR}/{id}.json"
+        self.filePath = None
         # Drawn Data
         self.fixData = None
         self.verifyFixObject(fixObject)
@@ -22,6 +22,7 @@ class Fix:
         if fixObject:
             if "id" in fixObject:
                 self.id = fixObject["id"]
+                self.filePath = f"{FIX_DIR}/{self.id}.json"
             if "defined_by" in fixObject:
                 self.definedBy = fixObject["defined_by"]
 

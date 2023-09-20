@@ -16,7 +16,7 @@ class Airport:
         self.lon = None
         self.runways = None
         self.pairedRunways = None
-        self.filePath = f"{AIRPORT_DIR}/{id}.json"
+        self.filePath = None
         # Drawn Data
         self.runwayData = None
         self.circleData = None
@@ -28,6 +28,7 @@ class Airport:
         if airportObject:
             if "id" in airportObject:
                 self.id = airportObject["id"]
+                self.filePath = f"{AIRPORT_DIR}/{self.id}.json"
             if "runways" in airportObject:
                 self.drawRunways = airportObject["runways"]
             if "symbol" in airportObject:
