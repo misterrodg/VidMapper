@@ -11,7 +11,6 @@ class CIFPVOR:
         self.magvar = None
         self.cifpLine = cifpLine
         self.setVOR()
-        del self.cifpLine
 
     def setVOR(self):
         cf = CIFPFunctions()
@@ -21,5 +20,6 @@ class CIFPVOR:
         self.magvar = cf.convertMagVar(self.cifpLine[74:79])
 
     def toJsonFile(self, filePath):
+        del self.cifpLine
         with open(filePath, "w") as jsonFile:
             json.dump(self.__dict__, jsonFile)
