@@ -4,6 +4,10 @@ A simple Python-based VidMap draw tool for use with [vNAS](https://virtualnas.ne
 
 it is designed to be a stopgap for any facilities that do not have available vidmap data, or low traffic facilities that might not merit a FOIA request.
 
+## Testing Note
+
+If you would like to test your maps prior to loading them into [vNAS Data Admin](https://data-admin.virtualnas.net/login), [GeoJSON.io](https://geojson.io) is a great tool.
+
 ## Requirements
 
 Python3.8 or Later (Tested with Python 3.10.12)
