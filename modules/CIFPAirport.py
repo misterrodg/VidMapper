@@ -18,7 +18,6 @@ class CIFPAirport:
         self.cifpLines = cifpLines
         self.setAirport()
         self.setRunways()
-        del self.cifpLines
 
     def setAirport(self):
         cf = CIFPFunctions()
@@ -99,5 +98,8 @@ class CIFPAirport:
         return pairedRunway
 
     def toJsonFile(self, filePath):
+        del self.cifpLines
+        self.paired_runways = self.pairedRunways
+        del self.pairedRunways
         with open(filePath, "w") as jsonFile:
             json.dump(self.__dict__, jsonFile)

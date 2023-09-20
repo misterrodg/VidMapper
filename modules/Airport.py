@@ -15,6 +15,7 @@ class Airport:
         self.lat = None
         self.lon = None
         self.runways = None
+        self.pairedRunways = None
         self.filePath = f"{AIRPORT_DIR}/{id}.json"
         # Drawn Data
         self.runwayData = None
@@ -44,3 +45,5 @@ class Airport:
                     self.lon = airportData["lon"]
                 if "runways" in airportData:
                     self.runways = airportData["runways"]
+                if "paired_runways" in airportData:
+                    self.pairedRunways = airportData["paired_runways"]
