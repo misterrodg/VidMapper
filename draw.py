@@ -1,8 +1,10 @@
+from modules.Facility import Facility
+
 import argparse
 
 
-def processFacility():
-    pass
+def processFacility(id):
+    facility = Facility(id)
 
 
 def main():
