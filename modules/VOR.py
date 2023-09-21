@@ -13,7 +13,7 @@ class VOR:
         self.innerOnly = False
         self.lat = None
         self.lon = None
-        self.filePath = None
+        self.filePath = ""
         # Drawn Data
         self.featureArray = []
         self.verifyVORObject(vorObject)

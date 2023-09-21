@@ -13,7 +13,7 @@ class Centerline:
         self.draw()
 
     def findRunway(self):
-        pairedRunway = None
+        pairedRunway = {}
         position = None
         if self.pairedRunways:
             for runway in self.pairedRunways:

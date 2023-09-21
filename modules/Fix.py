@@ -16,7 +16,7 @@ class Fix:
         self.rnavPoint = None
         self.lat = None
         self.lon = None
-        self.filePath = None
+        self.filePath = ""
         # Drawn Data
         self.featureArray = []
         self.verifyFixObject(fixObject)

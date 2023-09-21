@@ -20,8 +20,8 @@ class Airport:
         self.lat = None
         self.lon = None
         self.runways = None
-        self.pairedRunways = None
-        self.filePath = None
+        self.pairedRunways = []
+        self.filePath = ""
         # Drawn Data
         self.featureArray = []
         self.verifyAirportObject(airportObject)
