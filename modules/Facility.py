@@ -21,7 +21,7 @@ class Facility:
         self.definedBy = []
         self.restrictive = []
         self.filePath = f"{FACILITY_DIR}/{id}.json"
-        self.vidmapPath = f"{VIDMAP_DIR}/{id}.json"
+        self.vidmapPath = f"{VIDMAP_DIR}/{id}.geojson"
         self.featureArray = []
         self.getFacilityData()
         self.checkBoundaries()
