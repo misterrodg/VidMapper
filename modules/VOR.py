@@ -1,3 +1,4 @@
+from modules.Circle import Circle
 from modules.FileHandler import FileHandler
 
 import json
@@ -14,8 +15,7 @@ class VOR:
         self.lon = None
         self.filePath = None
         # Drawn Data
-        self.innerData = None
-        self.outerData = None
+        self.featureArray = []
         self.verifyVORObject(vorObject)
         self.getVORData()
 
@@ -36,3 +36,13 @@ class VOR:
                     self.lat = vorData["lat"]
                 if "lon" in vorData:
                     self.lon = vorData["lon"]
+
+    def drawVOR(self):
+        SIDES = 24
+        INNER_RADIUS = 0.05
+        OUTER_RADIUS = 0.45
+        inner = Circle(self.lat, self.lon, SIDES, INNER_RADIUS, self.magvar)
+        self.featureArray.append(inner.feature)
+        if not self.innerOnly:
+            outer = Circle(self.lat, self.lon, SIDES, OUTER_RADIUS, self.magvar)
+            self.featureArray.append(outer.feature)

@@ -48,7 +48,7 @@ class Coordinate:
                 )
             )
         )
-        distance = arc * self.DEG_TO_MIN
+        distance = arc * DEG_TO_MIN
         return distance
 
     def haversineGreatCircleBearing(self, endLat, endLon):

@@ -14,7 +14,10 @@ class CIFPVOR:
 
     def setVOR(self):
         cf = CIFPFunctions()
-        coord = cf.convertDMS(self.cifpLine[32:51])
+        vorData = self.cifpLine[32:51]
+        dmeData = self.cifpLine[55:74]
+        dmsLine = vorData if vorData.strip() != "" else dmeData
+        coord = cf.convertDMS(dmsLine)
         self.lat = coord.lat
         self.lon = coord.lon
         self.magvar = cf.convertMagVar(self.cifpLine[74:79])
