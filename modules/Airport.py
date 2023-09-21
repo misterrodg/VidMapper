@@ -53,6 +53,10 @@ class Airport:
                     self.runways = airportData["runways"]
                 if "paired_runways" in airportData:
                     self.pairedRunways = airportData["paired_runways"]
+                if not self.runways and not self.pairedRunways:
+                    self.drawRunways = False
+                    self.drawCircle = True
+                    self.drawCricleBarbs = True
 
     def drawAirport(self):
         SIDES = 24
