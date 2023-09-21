@@ -10,7 +10,7 @@
         {
           "runway": "RW04R",
           "length": 10,
-          "fixes": ["APPAA", "APPBB", "APPCC"]
+          "crossbars": [5, 10]
         }
       ]
     },
@@ -31,9 +31,16 @@
     {
       "id": "FIXAA",
       "defined_by": ["ZZZ", "QQQ"]
+    },
+    {
+      "id": "RNVAA",
+      "rnav_point": true
+    },
+    {
+      "id": "RNVBB",
+      "rnav_point": true
     }
   ],
-  "rnav_points": ["RNVAA", "RNVBB"],
   "vors": [
     { "id": "AAA", "inner_only": true },
     { "id": "QQQ", "inner_only": false },
