@@ -1,6 +1,7 @@
 from modules.FileHandler import FileHandler
 
 import json
+import urllib.request
 
 BOUNDARY_DIR = "./boundaries"
 
@@ -19,6 +20,8 @@ class Boundary:
                 boundaryData = json.load(jsonFile)
                 boundaryData = self.toLineString(boundaryData)
                 self.featureArray.append(boundaryData)
+        else:
+            self.downloadData()
 
     def toLineString(self, boundaryData):
         result = boundaryData
@@ -31,3 +34,11 @@ class Boundary:
                         geometry["coordinates"] = geometry["coordinates"][0][0]
                         result["geometry"] = geometry
         return result
+
+    def downloadData(self):
+        url = f"https://raw.githubusercontent.com/vatsimnetwork/simaware-tracon-project/main/Boundaries/{self.id}/{self.id}.json"
+        with urllib.request.urlopen(url) as res:
+            jsonData = json.load(res)
+            with open(self.filePath, "w") as jsonFile:
+                json.dump(jsonData, jsonFile)
+        self.getBoundaryData()
