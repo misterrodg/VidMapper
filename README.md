@@ -65,6 +65,21 @@ The VOR object has the following properties, with the properties marked <span st
 - `id`<span style="color:#FF0000">\*</span>: The identifier for the VOR.
 - `inner_only`: A boolean value that tells the script to print only the inner circle for the VOR. Useful for VORs at airports.
 
+### Restrictive Objects
+
+The Restrictive object is an array of restrictive airspace names.
+
+- Alert: use the standard format of `A0[0000][A]` (no dashes)
+- [The FAA doesn't appear to use Caution airspace]
+- [The FAA doesn't appear to use Danger airspace]
+- MOA: use `M[MOA Name]` (see note, below)
+- Prohibited, use the standard format of `P0[0000][A]` (no dashes)
+- Restricted, use the standard format of `R0[0000][A]` (no dashes)
+- [The FAA doesn't appear to use Training airspace]
+- Warning, use the standard format of `W0[0000][A]` (no dashes)
+
+**NOTE**: Naming in the CIFP file is mostly standardized, but has some quirks, particularly for MOAs. It may be worth opening the CIFP file and searching for the entry. For example, Stumpy Point MOA appears in the file as STUMPY PT.
+
 ## Drawing the Facility
 
 Run the following command, where `AAA` is the FAA three letter identifier for the facility:
