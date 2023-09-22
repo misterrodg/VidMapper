@@ -3,6 +3,7 @@ from modules.Boundary import Boundary
 from modules.CIFP import CIFP
 from modules.FileHandler import FileHandler
 from modules.Fix import Fix
+from modules.Restrictive import Restrictive
 from modules.VOR import VOR
 
 import json
@@ -28,6 +29,7 @@ class Facility:
         self.checkAirports()
         self.checkVORs()
         self.checkFixes()
+        self.checkRestrictive()
         self.toJsonFile(self.vidmapPath)
 
     def getFacilityData(self):
@@ -119,6 +121,24 @@ class Facility:
                 vorData.drawVOR()
                 if vorData.featureArray:
                     for feature in vorData.featureArray:
+                        self.featureArray.append(feature)
+
+    def checkRestrictive(self):
+        cf = CIFP()
+        if self.restrictive:
+            restIds = []
+            for rest in self.restrictive:
+                restIds.append(rest)
+            cf.checkForRestrictive(restIds)
+            self.drawRestrictive()
+
+    def drawRestrictive(self):
+        if self.restrictive:
+            for rest in self.restrictive:
+                restData = Restrictive(rest)
+                restData.drawRestrictive()
+                if restData.featureArray:
+                    for feature in restData.featureArray:
                         self.featureArray.append(feature)
 
     def toJsonFile(self, filePath):

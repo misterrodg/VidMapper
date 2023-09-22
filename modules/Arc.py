@@ -1,39 +1,60 @@
 from modules.Coordinate import Coordinate
 
+import math
+
 
 class Arc:
-    def __init__(self, lat, lon, sides, radius, fromDegree, toDegree, rotation=0):
-        self.lat = lat
-        self.lon = lon
-        self.sides = sides
-        self.radius = radius
-        self.fromDegree = fromDegree
-        self.toDegree = toDegree
-        self.rotation = rotation
-        self.feature = None
+    def __init__(
+        self,
+        direction,
+        centerLat,
+        centerLon,
+        startLat,
+        startLon,
+        stopLat,
+        stopLon,
+        distance,
+        bearing,
+        angle,
+    ):
+        self.direction = direction
+        self.cCenter = Coordinate(centerLat, centerLon)
+        self.cStart = Coordinate(startLat, startLon)
+        self.cStop = Coordinate(stopLat, stopLon)
+        self.distance = distance
+        self.bearing = bearing
+        self.angle = angle
+        self.coordinates = []
         self.draw()
 
     def draw(self):
-        DEGREES_IN_CIRCLE = 360
-        arcCenter = Coordinate(self.lat, self.lon)
-        arcPoints = []
-        angle = DEGREES_IN_CIRCLE / self.sides
-        segments = self.sides + 1
-        # Closes circle by drawingfrom final segment back to initial
-        for i in range(segments):
-            bearing = self.rotation + (i * angle)
-            if bearing >= (self.fromDegree + self.rotation) and bearing <= (
-                self.toDegree + self.rotation
-            ):
-                newPoint = Coordinate()
-                newPoint.fromPBD(arcCenter.lat, arcCenter.lon, bearing, self.radius)
-                # GeoJSON uses LON, LAT format
-                arcPoints.append([newPoint.lon, newPoint.lat])
-        featureObject = {
-            "type": "Feature",
-            "geometry": {"type": "LineString", "coordinates": arcPoints},
-            "properties": {
-                "thickness": 1,
-            },
-        }
-        self.feature = featureObject
+        endBearing = self.cCenter.haversineGreatCircleBearing(
+            self.cStop.lat, self.cStop.lon
+        )
+        start = self.bearing if self.bearing else 0
+        stop = endBearing if self.cStop.lat else 360
+        bearing = start
+        bearingLoLimit = start
+        bearingHiLimit = stop + 360 if start > stop else stop
+        if self.direction == "L":
+            bearing = stop
+            bearingLoLimit = stop
+            bearingHiLimit = start + 360 if start < stop else start
+        if self.cStart.lat:
+            self.coordinates.append(self.cStart)
+        resultArray = []
+        while bearing >= bearingLoLimit and bearing <= bearingHiLimit:
+            modBearing = math.fmod(bearing + 360.0, 360.0)
+            resultPoint = Coordinate()
+            resultPoint.fromPBD(
+                self.cCenter.lat, self.cCenter.lon, modBearing, self.distance
+            )
+            resultArray.append(resultPoint)
+            bearing += self.angle
+        if self.direction == "L":
+            # Reverse the array
+            resultArray = resultArray[::-1]
+        for res in resultArray:
+            self.coordinates.append(res)
+        if self.cStop.lat:
+            self.coordinates.append(self.cStop)

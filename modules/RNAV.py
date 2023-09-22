@@ -1,4 +1,4 @@
-from modules.Arc import Arc
+from modules.RNAVArc import RNAVArc
 from modules.Coordinate import Coordinate
 from modules.Circle import Circle
 
@@ -39,7 +39,7 @@ class RNAV:
             bearing = self.rotation + degrees[i]["bearing"]
             arcPoint = Coordinate()
             arcPoint.fromPBD(self.lat, self.lon, bearing, self.radius * ARC_RATIO)
-            arc = Arc(
+            arc = RNAVArc(
                 arcPoint.lat,
                 arcPoint.lon,
                 self.sides,

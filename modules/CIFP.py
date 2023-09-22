@@ -1,5 +1,6 @@
 from modules.CIFPAirport import CIFPAirport
 from modules.CIFPFix import CIFPFix
+from modules.CIFPRestrictive import CIFPRestrictive
 from modules.CIFPVOR import CIFPVOR
 from modules.FileHandler import FileHandler
 
@@ -11,10 +12,12 @@ CIFP_PATH = f"{NAVDATA_DIR}/{CIFP_FILENAME}"
 AIRPORT_DIR = f"{NAVDATA_DIR}/airports"
 VOR_DIR = f"{NAVDATA_DIR}/vors"
 FIX_DIR = f"{NAVDATA_DIR}/fixes"
+RESTRICTIVE_DIR = f"{NAVDATA_DIR}/restrictive"
 # CIFP Line Definitions
 CIFP_AIRPORT_PREFIX = "SUSAP"
 CIFP_NAVAID_PREFIX = "SUSAD"
 CIFP_FIX_PREFIX = "SUSAE"
+CIFP_RESTRICTIVE_PREFIX = "SUSAU"
 
 
 class CIFP:
@@ -22,6 +25,7 @@ class CIFP:
         self.airportsToParse = []
         self.fixesToParse = []
         self.vorsToParse = []
+        self.restrictiveToParse = []
         self.checkDirectories()
 
     def checkDirectories(self):
@@ -29,6 +33,7 @@ class CIFP:
         fh.checkDir(AIRPORT_DIR)
         fh.checkDir(VOR_DIR)
         fh.checkDir(FIX_DIR)
+        fh.checkDir(RESTRICTIVE_DIR)
 
     def checkForAirports(self, airports):
         fh = FileHandler()
@@ -100,3 +105,28 @@ class CIFP:
                         if line.startswith(vorLine):
                             cifpVor = CIFPVOR(vor, line)
                             cifpVor.toJsonFile(vorFile)
+
+    def checkForRestrictive(self, restrictive):
+        fh = FileHandler()
+        if restrictive:
+            for rest in restrictive:
+                restrictiveFile = f"{RESTRICTIVE_DIR}/{rest}.json"
+                if not fh.checkFile(restrictiveFile):
+                    self.restrictiveToParse.append(rest)
+        if self.restrictiveToParse:
+            self.parseRestrictive()
+
+    def parseRestrictive(self):
+        fh = FileHandler()
+        if fh.checkFile(CIFP_PATH):
+            with open(CIFP_PATH) as cifpFile:
+                cifpData = cifpFile.readlines()
+                for rest in self.restrictiveToParse:
+                    restFile = f"{RESTRICTIVE_DIR}/{rest}.json"
+                    restLines = []
+                    restLine = f"{CIFP_RESTRICTIVE_PREFIX}"
+                    for line in cifpData:
+                        if line.startswith(restLine) and line[8:18].strip() == rest:
+                            restLines.append(line)
+                            cifpRest = CIFPRestrictive(rest, restLines)
+                            cifpRest.toJsonFile(restFile)
