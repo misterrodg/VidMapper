@@ -16,7 +16,7 @@ Python3.8 or Later (Tested with Python 3.10.12)
 
 First, download the FAA CIFP zip file. Copy the `FAACIFP18` file from the zip into the `./navdata` directory.
 
-Next, create a facility file. This file will define what should be drawn into the map.
+Next, create a facility file in the `./facilities` directory. This file will define what should be drawn into the map.
 
 ## Facility File Format
 
@@ -87,3 +87,5 @@ Run the following command, where `AAA` is the FAA three letter identifier for th
 ```
 python3 draw.py --facility=[AAA]
 ```
+
+The resulting file will be in `./facilities/vidmaps`
