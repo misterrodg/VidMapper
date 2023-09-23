@@ -38,25 +38,28 @@ class Fix:
             with open(self.filePath) as jsonFile:
                 fixData = json.load(jsonFile)
                 if "lat" in fixData:
-                    self.lat = fixData["lat"]
+                    if type(fixData["lat"]) == float:
+                        self.lat = fixData["lat"]
                 if "lon" in fixData:
-                    self.lon = fixData["lon"]
+                    if type(fixData["lon"]) == float:
+                        self.lon = fixData["lon"]
 
     def drawFix(self):
-        if self.rnavPoint == True:
-            SIDES = 24
-            RADIUS = 0.3
-            rnavPoint = RNAV(self.lat, self.lon, SIDES, RADIUS, self.magvar)
-            for feature in rnavPoint.featureArray:
-                self.featureArray.append(feature)
-        else:
-            if self.definedBy:
-                LENGTH = 1
-                cross = Cross(self.lat, self.lon, LENGTH, self.definedBy)
-                for feature in cross.featureArray:
+        if self.lat != None and self.lon != None:
+            if self.rnavPoint == True:
+                SIDES = 24
+                RADIUS = 0.3
+                rnavPoint = RNAV(self.lat, self.lon, SIDES, RADIUS, self.magvar)
+                for feature in rnavPoint.featureArray:
                     self.featureArray.append(feature)
             else:
-                SIDES = 3
-                RADIUS = 0.2
-                triangle = Circle(self.lat, self.lon, SIDES, RADIUS, self.magvar)
-                self.featureArray.append(triangle.feature)
+                if self.definedBy:
+                    LENGTH = 1
+                    cross = Cross(self.lat, self.lon, LENGTH, self.definedBy)
+                    for feature in cross.featureArray:
+                        self.featureArray.append(feature)
+                else:
+                    SIDES = 3
+                    RADIUS = 0.2
+                    triangle = Circle(self.lat, self.lon, SIDES, RADIUS, self.magvar)
+                    self.featureArray.append(triangle.feature)

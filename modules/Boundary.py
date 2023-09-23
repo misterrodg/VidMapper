@@ -37,8 +37,11 @@ class Boundary:
 
     def downloadData(self):
         url = f"https://raw.githubusercontent.com/vatsimnetwork/simaware-tracon-project/main/Boundaries/{self.id}/{self.id}.json"
-        with urllib.request.urlopen(url) as res:
-            jsonData = json.load(res)
-            with open(self.filePath, "w") as jsonFile:
-                json.dump(jsonData, jsonFile)
-        self.getBoundaryData()
+        try:
+            with urllib.request.urlopen(url) as res:
+                jsonData = json.load(res)
+                with open(self.filePath, "w") as jsonFile:
+                    json.dump(jsonData, jsonFile)
+            self.getBoundaryData()
+        except:
+            print(f"Unable to find boundary for {self.id}")

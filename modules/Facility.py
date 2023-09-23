@@ -24,13 +24,18 @@ class Facility:
         self.filePath = f"{FACILITY_DIR}/{id}.json"
         self.vidmapPath = f"{VIDMAP_DIR}/{id}.geojson"
         self.featureArray = []
-        self.getFacilityData()
-        self.checkBoundaries()
-        self.checkAirports()
-        self.checkVORs()
-        self.checkFixes()
-        self.checkRestrictive()
-        self.toJsonFile(self.vidmapPath)
+        if self.checkForCifp():
+            self.getFacilityData()
+            self.checkBoundaries()
+            self.checkAirports()
+            self.checkVORs()
+            self.checkFixes()
+            self.checkRestrictive()
+            self.toJsonFile(self.vidmapPath)
+
+    def checkForCifp(self):
+        cf = CIFP()
+        return cf.checkForFile()
 
     def getFacilityData(self):
         fh = FileHandler()

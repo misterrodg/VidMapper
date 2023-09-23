@@ -28,6 +28,16 @@ class CIFP:
         self.restrictiveToParse = []
         self.checkDirectories()
 
+    def checkForFile(self):
+        result = True
+        fh = FileHandler()
+        if not fh.checkFile(CIFP_PATH):
+            result = False
+            print(
+                f"Unable to find CIFP file at {CIFP_PATH}. Please ensure it is downloaded and in the {NAVDATA_DIR} directory."
+            )
+        return result
+
     def checkDirectories(self):
         fh = FileHandler()
         fh.checkDir(AIRPORT_DIR)
@@ -46,19 +56,17 @@ class CIFP:
             self.parseAirports()
 
     def parseAirports(self):
-        fh = FileHandler()
-        if fh.checkFile(CIFP_PATH):
-            with open(CIFP_PATH) as cifpFile:
-                cifpData = cifpFile.readlines()
-                for airport in self.airportsToParse:
-                    airportFile = f"{AIRPORT_DIR}/{airport}.json"
-                    airportLines = []
-                    airportLine = f"{CIFP_AIRPORT_PREFIX} {airport.ljust(4,' ')}"
-                    for line in cifpData:
-                        if line.startswith(airportLine):
-                            airportLines.append(line)
-                    cifpAirport = CIFPAirport(airport, airportLines)
-                    cifpAirport.toJsonFile(airportFile)
+        with open(CIFP_PATH) as cifpFile:
+            cifpData = cifpFile.readlines()
+            for airport in self.airportsToParse:
+                airportFile = f"{AIRPORT_DIR}/{airport}.json"
+                airportLines = []
+                airportLine = f"{CIFP_AIRPORT_PREFIX} {airport.ljust(4,' ')}"
+                for line in cifpData:
+                    if line.startswith(airportLine):
+                        airportLines.append(line)
+                cifpAirport = CIFPAirport(airport, airportLines)
+                cifpAirport.toJsonFile(airportFile)
 
     def checkForFixes(self, fixes):
         fh = FileHandler()
@@ -71,17 +79,15 @@ class CIFP:
             self.parseFixes()
 
     def parseFixes(self):
-        fh = FileHandler()
-        if fh.checkFile(CIFP_PATH):
-            with open(CIFP_PATH) as cifpFile:
-                cifpData = cifpFile.readlines()
-                for fix in self.fixesToParse:
-                    fixFile = f"{FIX_DIR}/{fix}.json"
-                    fixLine = f"{CIFP_FIX_PREFIX}AENRT   {fix}"
-                    for line in cifpData:
-                        if line.startswith(fixLine):
-                            cifpFix = CIFPFix(fix, line)
-                            cifpFix.toJsonFile(fixFile)
+        with open(CIFP_PATH) as cifpFile:
+            cifpData = cifpFile.readlines()
+            for fix in self.fixesToParse:
+                fixFile = f"{FIX_DIR}/{fix}.json"
+                fixLine = f"{CIFP_FIX_PREFIX}AENRT   {fix}"
+                for line in cifpData:
+                    if line.startswith(fixLine):
+                        cifpFix = CIFPFix(fix, line)
+                        cifpFix.toJsonFile(fixFile)
 
     def checkForVORs(self, vors):
         fh = FileHandler()
@@ -94,17 +100,15 @@ class CIFP:
             self.parseVORs()
 
     def parseVORs(self):
-        fh = FileHandler()
-        if fh.checkFile(CIFP_PATH):
-            with open(CIFP_PATH) as cifpFile:
-                cifpData = cifpFile.readlines()
-                for vor in self.vorsToParse:
-                    vorFile = f"{VOR_DIR}/{vor}.json"
-                    vorLine = f"{CIFP_NAVAID_PREFIX}        {vor}"
-                    for line in cifpData:
-                        if line.startswith(vorLine):
-                            cifpVor = CIFPVOR(vor, line)
-                            cifpVor.toJsonFile(vorFile)
+        with open(CIFP_PATH) as cifpFile:
+            cifpData = cifpFile.readlines()
+            for vor in self.vorsToParse:
+                vorFile = f"{VOR_DIR}/{vor}.json"
+                vorLine = f"{CIFP_NAVAID_PREFIX}        {vor}"
+                for line in cifpData:
+                    if line.startswith(vorLine):
+                        cifpVor = CIFPVOR(vor, line)
+                        cifpVor.toJsonFile(vorFile)
 
     def checkForRestrictive(self, restrictive):
         fh = FileHandler()
@@ -117,16 +121,14 @@ class CIFP:
             self.parseRestrictive()
 
     def parseRestrictive(self):
-        fh = FileHandler()
-        if fh.checkFile(CIFP_PATH):
-            with open(CIFP_PATH) as cifpFile:
-                cifpData = cifpFile.readlines()
-                for rest in self.restrictiveToParse:
-                    restFile = f"{RESTRICTIVE_DIR}/{rest}.json"
-                    restLines = []
-                    restLine = f"{CIFP_RESTRICTIVE_PREFIX}"
-                    for line in cifpData:
-                        if line.startswith(restLine) and line[8:18].strip() == rest:
-                            restLines.append(line)
-                            cifpRest = CIFPRestrictive(rest, restLines)
-                            cifpRest.toJsonFile(restFile)
+        with open(CIFP_PATH) as cifpFile:
+            cifpData = cifpFile.readlines()
+            for rest in self.restrictiveToParse:
+                restFile = f"{RESTRICTIVE_DIR}/{rest}.json"
+                restLines = []
+                restLine = f"{CIFP_RESTRICTIVE_PREFIX}"
+                for line in cifpData:
+                    if line.startswith(restLine) and line[8:18].strip() == rest:
+                        restLines.append(line)
+                        cifpRest = CIFPRestrictive(rest, restLines)
+                        cifpRest.toJsonFile(restFile)

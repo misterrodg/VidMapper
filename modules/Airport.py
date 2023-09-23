@@ -46,9 +46,11 @@ class Airport:
             with open(self.filePath) as jsonFile:
                 airportData = json.load(jsonFile)
                 if "lat" in airportData:
-                    self.lat = airportData["lat"]
+                    if type(airportData["lat"]) == float:
+                        self.lat = airportData["lat"]
                 if "lon" in airportData:
-                    self.lon = airportData["lon"]
+                    if type(airportData["lon"]) == float:
+                        self.lon = airportData["lon"]
                 if "runways" in airportData:
                     self.runways = airportData["runways"]
                 if "paired_runways" in airportData:
@@ -59,36 +61,37 @@ class Airport:
                     self.drawCricleBarbs = True
 
     def drawAirport(self):
-        SIDES = 24
-        RADIUS = 0.3
-        if self.drawCircle:
-            circle = Circle(self.lat, self.lon, SIDES, RADIUS, self.magvar)
-            self.featureArray.append(circle.feature)
-        if self.drawCircleBarbs:
-            BARB_NUMBER = 4
-            BARB_LENGTH = 0.2
-            circleBarbs = CircleBarbs(
-                self.lat, self.lon, BARB_NUMBER, BARB_LENGTH, RADIUS, self.magvar
-            )
-            for feature in circleBarbs.featureArray:
-                self.featureArray.append(feature)
-        if self.drawRunways:
-            for runway in self.pairedRunways:
-                runwayLine = Line(
-                    runway["baseLat"],
-                    runway["baseLon"],
-                    runway["recipLat"],
-                    runway["recipLon"],
+        if self.lat and self.lon:
+            SIDES = 24
+            RADIUS = 0.3
+            if self.drawCircle:
+                circle = Circle(self.lat, self.lon, SIDES, RADIUS, self.magvar)
+                self.featureArray.append(circle.feature)
+            if self.drawCircleBarbs:
+                BARB_NUMBER = 4
+                BARB_LENGTH = 0.2
+                circleBarbs = CircleBarbs(
+                    self.lat, self.lon, BARB_NUMBER, BARB_LENGTH, RADIUS, self.magvar
                 )
-                self.featureArray.append(runwayLine.feature)
-        if self.centerlines:
-            for centerline in self.centerlines:
-                if "runway" in centerline:
-                    cline = Centerline(
-                        centerline["runway"],
-                        self.pairedRunways,
-                        centerline["length"],
-                        centerline["crossbars"],
+                for feature in circleBarbs.featureArray:
+                    self.featureArray.append(feature)
+            if self.drawRunways:
+                for runway in self.pairedRunways:
+                    runwayLine = Line(
+                        runway["baseLat"],
+                        runway["baseLon"],
+                        runway["recipLat"],
+                        runway["recipLon"],
                     )
-                    for feature in cline.featureArray:
-                        self.featureArray.append(feature)
+                    self.featureArray.append(runwayLine.feature)
+            if self.centerlines:
+                for centerline in self.centerlines:
+                    if "runway" in centerline:
+                        cline = Centerline(
+                            centerline["runway"],
+                            self.pairedRunways,
+                            centerline["length"],
+                            centerline["crossbars"],
+                        )
+                        for feature in cline.featureArray:
+                            self.featureArray.append(feature)
