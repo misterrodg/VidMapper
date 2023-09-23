@@ -26,9 +26,10 @@ class FileHandler:
         # Alter this at your own risk.
         if subdirPath != None:
             deletePath = self.localPath + "/" + subdirPath
-            for f in os.listdir(deletePath):
-                if f.endswith(fileType):
-                    os.remove(os.path.join(deletePath, f))
+            if os.path.exists(deletePath):
+                for f in os.listdir(deletePath):
+                    if f.endswith(fileType):
+                        os.remove(os.path.join(deletePath, f))
 
     def searchForType(self, fileType, subdirPath=None):
         result = []
