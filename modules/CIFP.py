@@ -128,7 +128,7 @@ class CIFP:
                 restLines = []
                 restLine = f"{CIFP_RESTRICTIVE_PREFIX}"
                 for line in cifpData:
-                    if line.startswith(restLine) and line[8:18].strip() == rest:
+                    if line.startswith(restLine) and line[8:19].strip() == rest:
                         restLines.append(line)
                         cifpRest = CIFPRestrictive(rest, restLines)
                         cifpRest.toJsonFile(restFile)
