@@ -6,7 +6,7 @@ from modules.Line import Line
 import json
 import math
 
-LINE_LENGTH = 0.174515206514658  # This is desired line length at an angle corresponding to 1* at 10NM
+LINE_LENGTH = 1.74515206514658  # This is desired line length at an angle corresponding to 10* at 10NM
 DEGREES_IN_CIRCLE = 360
 
 RESTRICTIVE_DIR = "./navdata/restrictive"
