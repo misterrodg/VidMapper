@@ -20,6 +20,7 @@ class Facility:
         self.fixes = []
         self.vors = []
         self.definedBy = []
+        self.frds = []
         self.restrictive = []
         self.filePath = f"{FACILITY_DIR}/{id}.json"
         self.vidmapPath = f"{VIDMAP_DIR}/{id}.geojson"
@@ -53,6 +54,11 @@ class Facility:
                             for vor in fix["defined_by"]:
                                 vorObject = {"id": vor}
                                 self.definedBy.append(vorObject)
+                        if "frd_point" in fix:
+                            defineArray = fix["frd_point"].split("/")
+                            vor = {"id": defineArray[0]}
+                            self.frds.append(vor)
+
                 if "vors" in facilityData:
                     self.vors = facilityData["vors"]
                 if "restrictive" in facilityData:
@@ -115,6 +121,8 @@ class Facility:
             for vor in self.vors:
                 vorIds.append(vor["id"])
             for vor in self.definedBy:
+                vorIds.append(vor["id"])
+            for vor in self.frds:
                 vorIds.append(vor["id"])
             cf.checkForVORs(vorIds)
             self.drawVORs()
