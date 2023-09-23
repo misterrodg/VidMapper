@@ -6,7 +6,8 @@ from modules.Line import Line
 import json
 import math
 
-LINE_LENGTH = 1.74515206514658  # This is desired line length at an angle corresponding to 10* at 10NM
+CIRCLE_LINE_LENGTH = 0.349030413029316  # This is desired line length at an angle corresponding to 2* at 10NM
+ARC_LINE_LENGTH = 1.74515206514658  # This is desired line length at an angle corresponding to 10* at 10NM
 DEGREES_IN_CIRCLE = 360
 
 RESTRICTIVE_DIR = "./navdata/restrictive"
@@ -31,11 +32,14 @@ class Restrictive:
 
     def drawCircle(self, typeObject):
         if "center" in typeObject and "distance" in typeObject:
-            coord = typeObject["center"]
-            dist = typeObject["distance"]
-            angle = math.radians(math.tan(LINE_LENGTH / dist))
-            sides = DEGREES_IN_CIRCLE / angle
-            circle = Circle(coord.lat, coord.lon, sides, dist)
+            center = typeObject["center"]
+            lat = float(center[0])
+            lon = float(center[1])
+            distance = typeObject["distance"]
+            dist = float(distance)
+            angle = math.degrees(math.tan(CIRCLE_LINE_LENGTH / dist))
+            sides = int(DEGREES_IN_CIRCLE // angle)
+            circle = Circle(lat, lon, sides, dist)
             self.featureArray.append(circle.feature)
 
     def drawArc(self, typeObject):
@@ -54,7 +58,7 @@ class Restrictive:
             bearing = typeObject["bearing"]
             start = typeObject["from"]
             stop = typeObject["to"]
-            angle = math.radians(math.tan(LINE_LENGTH / dist))
+            angle = math.radians(math.tan(ARC_LINE_LENGTH / dist))
             arc = Arc(
                 direction,
                 coord[0],
