@@ -33,6 +33,13 @@
       "defined_by": ["ZZZ", "QQQ"]
     },
     {
+      "id": "FIXBB"
+    },
+    {
+      "id": "FRDFX",
+      "frd_point": "VOR/180/20"
+    },
+    {
       "id": "RNVAA",
       "rnav_point": true
     },
@@ -43,8 +50,8 @@
   ],
   "vors": [
     { "id": "AAA", "inner_only": true },
-    { "id": "QQQ", "inner_only": false },
-    { "id": "ZZZ", "inner_only": false }
+    { "id": "QQQ" },
+    { "id": "ZZZ" }
   ],
   "restrictive": ["MOAZZ", "P9999", "R1"]
 }

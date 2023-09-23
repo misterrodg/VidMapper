@@ -16,7 +16,7 @@ Python3.8 or Later (Tested with Python 3.10.12)
 
 First, download the FAA CIFP zip file. Copy the `FAACIFP18` file from the zip into the `./navdata` directory.
 
-Next, create a facility file in the `./facilities` directory. This file will define what should be drawn into the map.
+Next, create a facility file in the `./facilities` directory with the name of the facility you will be creating. For example, if you are creating a facility for Dover RAPCON, the facility file would be `DOV.json`. If the facility ID matches the ID from the [Simaware TRACON Project](https://github.com/vatsimnetwork/simaware-tracon-project/tree/main/Boundaries), it will automatically add it to your videomap. The facility file defines what should be drawn into the map.
 
 ## Facility File Format
 
@@ -54,7 +54,8 @@ The fix object has the following properties, with the properties marked <span st
 
 - `id`<span style="color:#FF0000">\*</span>: The identifier for the fix.
 - `defined_by`: An array of VORs that define the fix.
-- `rnav_point`: A boolean value that tells the script to draw this point as an RNAV point symbol (four-pointed star). This overrides any defines in `defined_by`.
+- `frd_point`: A string in the format `"VOR/Radial/Distance"` (`"AML/135/12"`). This overrides `defined_by` but is overridden by `rnav_point`
+- `rnav_point`: A boolean value that tells the script to draw this point as an RNAV point symbol (four-pointed star). This overrides any defines in `defined_by` or `frd_point`.
 
 **NOTE**: If `defined_by` is omitted, the fix object will be drawn as a triangle rather than crossed lines.
 
@@ -69,16 +70,16 @@ The VOR object has the following properties, with the properties marked <span st
 
 The Restrictive object is an array of restrictive airspace names.
 
-- Alert: use the standard format of `A0[0000][A]` (no dashes)
+- Alert: use the standard format of `A0[0000][A]` (A, followed by at least one number, and an optional letter, no dashes)
 - [The FAA doesn't appear to use Caution airspace]
 - [The FAA doesn't appear to use Danger airspace]
 - MOA: use `M[MOA Name]` (see note, below)
-- Prohibited, use the standard format of `P0[0000][A]` (no dashes)
-- Restricted, use the standard format of `R0[0000][A]` (no dashes)
+- Prohibited, use the standard format of `P0[0000][A]` (P, followed by at least one number, and an optional letter, with no dashes)
+- Restricted, use the standard format of `R0[0000][A]` (R, followed by at least one number, and an optional letter, with no dashes)
 - [The FAA doesn't appear to use Training airspace]
-- Warning, use the standard format of `W0[0000][A]` (no dashes)
+- Warning, use the standard format of `W0[0000][A]` (W, followed by at least one number, and an optional letter, with no dashes)
 
-**NOTE**: Naming in the CIFP file is mostly standardized, but has some quirks, particularly for MOAs. It may be worth opening the CIFP file and searching for the entry. For example, Stumpy Point MOA appears in the file as STUMPY PT.
+**NOTE**: Naming in the CIFP file is mostly standardized, but has some quirks, particularly for MOAs. It may be worth opening the CIFP file and searching for the entry. For example, Stumpy Point MOA appears in the file as STUMPY PT. If your program supports regex, you can search with `SUSAUR..M` and start typing the MOA name right after the `M`. For longer names, the name may actually be truncated. The Tombstone MOA, for example, is truncated as `TOMBSTON A`, `TOMBSTON B` amd `TOMBSTON C`.
 
 ## Drawing the Facility
 
