@@ -90,3 +90,23 @@ python3 draw.py --facility=[AAA]
 ```
 
 The resulting file will be in `./facilities/vidmaps`
+
+### Additional Command Line Arguments
+
+An additional command line argument of `--purge` is available to quickly clean up the navdata subfolders. This is particularly useful if you have downloaded a new CIFP file, when you will want to make sure the old navdata has been removed.
+
+The argument can be included as part of a normal vidmap draw. Regardless of its position, the navdata will be cleared prior to attempting to read the new navdata and drawing the videomap.
+
+Purge only:
+
+```
+python3 draw.py --purge
+```
+
+Purge and draw:
+
+```
+python3 draw.py --facility=[AAA] --purge
+-OR-
+python3 draw.py --purge --facility=[AAA]
+```
