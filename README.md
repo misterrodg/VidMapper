@@ -14,7 +14,7 @@ Python3.8 or Later (Tested with Python 3.10.12)
 
 # Instructions for Use
 
-First, download the FAA CIFP zip file. Copy the `FAACIFP18` file from the zip into the `./navdata` directory.
+First, download the [FAA CIFP](https://www.faa.gov/air_traffic/flight_info/aeronav/digital_products/cifp/download/) zip file. Copy the `FAACIFP18` file from the zip into the `./navdata` directory.
 
 Next, create a facility file in the `./facilities` directory with the name of the facility you will be creating. For example, if you are creating a facility for Dover RAPCON, the facility file would be `DOV.json`. If the facility ID matches the ID from the [Simaware TRACON Project](https://github.com/vatsimnetwork/simaware-tracon-project/tree/main/Boundaries), it will automatically add it to your videomap. The facility file defines what should be drawn into the map.
 
