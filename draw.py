@@ -30,7 +30,7 @@ def main():
         purgeNavData()
     if facility:
         processFacility(args.facility)
-    if not purge and facility:
+    if not purge and not facility:
         print("Please select a facility with the facility flag.")
         print("Example: --facility=AAA")
 
