@@ -84,10 +84,10 @@ class Fix:
             if self.rnavPoint == True:
                 self.drawRNAV()
             else:
-                if self.frdPoint:
+                if self.frdPoint != "":
                     self.drawFRD()
                 else:
-                    if self.definedBy:
+                    if self.definedBy != []:
                         self.drawDefinedBy()
                     else:
                         self.drawBasic()
