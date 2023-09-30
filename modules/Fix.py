@@ -75,7 +75,7 @@ class Fix:
 
     def drawDefinedBy(self):
         LENGTH = 1
-        cross = Cross(self.lat, self.lon, LENGTH, self.definedBy)
+        cross = Cross(self.lat, self.lon, LENGTH, self.cifpVors)
         for feature in cross.featureArray:
             self.featureArray.append(feature)
 
