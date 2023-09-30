@@ -1,7 +1,5 @@
 from modules.CIFPFunctions import CIFPFunctions
 
-import json
-
 CIRCLE = "C"
 CLOCKWISE_ARC = "R"
 COUNTER_CLOCKWISE_ARC = "L"
@@ -100,8 +98,7 @@ class CIFPRestrictive:
             sectionObject = {"definition": sectionDefinition}
             self.definitions.append(sectionObject)
 
-    def toJsonFile(self, filePath):
+    def toDict(self):
         del self.cifpLines
         del self.sectionedLines
-        with open(filePath, "w") as jsonFile:
-            json.dump(self.__dict__, jsonFile)
+        return self.__dict__

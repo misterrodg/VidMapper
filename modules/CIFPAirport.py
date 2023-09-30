@@ -1,8 +1,6 @@
 from modules.CIFPFunctions import CIFPFunctions
 from modules.Coordinate import Coordinate
 
-import json
-
 CIFP_AIRPORT_LINE = "A"
 CIFP_RUNWAY_LINE = "G"
 
@@ -97,9 +95,8 @@ class CIFPAirport:
         pairedRunway["baseLon"] = baseCoord.lon
         return pairedRunway
 
-    def toJsonFile(self, filePath):
+    def toDict(self):
         del self.cifpLines
         self.paired_runways = self.pairedRunways
         del self.pairedRunways
-        with open(filePath, "w") as jsonFile:
-            json.dump(self.__dict__, jsonFile)
+        return self.__dict__
