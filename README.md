@@ -2,7 +2,7 @@
 
 A simple Python-based VidMap draw tool for use with [vNAS](https://virtualnas.net).
 
-it is designed to be a stopgap for any facilities that do not have available vidmap data, or low traffic facilities that might not merit a FOIA request.
+It is designed to be a stopgap for any facilities that do not have available vidmap data, or low traffic facilities that might not merit a FOIA request.
 
 ## Testing Note
 
@@ -57,7 +57,7 @@ The fix object has the following properties, with the properties marked <span st
 - `frd_point`: A string in the format `"VOR/Radial/Distance"` (`"AML/135/12"`). This overrides `defined_by` but is overridden by `rnav_point`
 - `rnav_point`: A boolean value that tells the script to draw this point as an RNAV point symbol (four-pointed star). This overrides any defines in `defined_by` or `frd_point`.
 
-**NOTE**: If `defined_by` is omitted, the fix object will be drawn as a triangle rather than crossed lines.
+**NOTE**: If `defined_by`, `frd_point`, and `rnav_point` are not set, the fix will be drawn as a triangle.
 
 ### VOR Objects
 
@@ -79,7 +79,7 @@ The Restrictive object is an array of restrictive airspace names.
 - [The FAA doesn't appear to use Training airspace]
 - Warning, use the standard format of `W0[0000][A]` (W, followed by at least one number, and an optional letter, with no dashes)
 
-**NOTE**: Naming in the CIFP file is mostly standardized, but has some quirks, particularly for MOAs. It may be worth opening the CIFP file and searching for the entry. For example, Stumpy Point MOA appears in the file as STUMPY PT. If your program supports regex, you can search with `SUSAUR..M` and start typing the MOA name right after the `M`. For longer names, the name may actually be truncated. The Tombstone MOA, for example, is truncated as `TOMBSTON A`, `TOMBSTON B` amd `TOMBSTON C`.
+**NOTE**: Naming in the CIFP file is mostly standardized, but has some quirks, particularly for MOAs. It may be worth opening the CIFP file and searching for the entry. For example, Stumpy Point MOA appears in the file as STUMPY PT. If your program supports regex, you can search with `SUSAUR..M` and start typing the MOA name right after the `M` (e.g., `SUSAUR..MDEMO` for the DEMO MOA). For longer names, the name may actually be truncated. The Tombstone MOA, for example, is truncated as `TOMBSTON A`, `TOMBSTON B` amd `TOMBSTON C`.
 
 ## Drawing the Facility
 
@@ -89,7 +89,7 @@ Run the following command, where `AAA` is the FAA three letter identifier for th
 python3 draw.py --facility=[AAA]
 ```
 
-The resulting file will be in `./facilities/vidmaps`
+The resulting file will be in `./vidmaps`
 
 ### Additional Command Line Arguments
 
