@@ -5,6 +5,13 @@ class FileHandler:
     def __init__(self):
         self.localPath = os.getcwd()
 
+    def checkPath(self, pathFromRoot: str):
+        result = False
+        path = self.localPath + "/" + pathFromRoot
+        if os.path.exists(path):
+            result = True
+        return result
+
     def checkFile(self, filePathFromRoot: str):
         result = False
         filePath = self.localPath + "/" + filePathFromRoot
