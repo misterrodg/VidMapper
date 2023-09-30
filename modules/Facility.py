@@ -173,11 +173,15 @@ class Facility:
                             self.featureArray.append(feature)
 
     def drawFixes(self):
+        if self.fixes:
+            for fix in self.fixes:
+                if "frd_point" in fix:
+                    self.cifpFixes.append(fix)
         if self.cifpFixes:
             for fix in self.cifpFixes:
-                vors = self.checkForVORsInFix(fix)
                 fixDefinition = self.findFixDefinition(fix["id"])
                 if fixDefinition != None:
+                    vors = self.checkForVORsInFix(fixDefinition)
                     fixData = Fix(self.magvar, fixDefinition, fix, vors)
                     fixData.drawFix()
                     if fixData.featureArray:

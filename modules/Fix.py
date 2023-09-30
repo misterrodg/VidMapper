@@ -75,7 +75,7 @@ class Fix:
 
     def drawDefinedBy(self):
         LENGTH = 1
-        cross = Cross(self.lat, self.lon, LENGTH, self.definedBy)
+        cross = Cross(self.lat, self.lon, LENGTH, self.cifpVors)
         for feature in cross.featureArray:
             self.featureArray.append(feature)
 
@@ -84,10 +84,10 @@ class Fix:
             if self.rnavPoint == True:
                 self.drawRNAV()
             else:
-                if self.frdPoint:
+                if self.frdPoint != "":
                     self.drawFRD()
                 else:
-                    if self.definedBy:
+                    if self.definedBy != []:
                         self.drawDefinedBy()
                     else:
                         self.drawBasic()
