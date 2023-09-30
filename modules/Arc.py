@@ -6,16 +6,16 @@ import math
 class Arc:
     def __init__(
         self,
-        direction,
-        centerLat,
-        centerLon,
-        startLat,
-        startLon,
-        stopLat,
-        stopLon,
-        distance,
-        bearing,
-        angle,
+        direction: str,
+        centerLat: float,
+        centerLon: float,
+        startLat: float,
+        startLon: float,
+        stopLat: float,
+        stopLon: float,
+        distance: float,
+        bearing: float,
+        angle: float,
     ):
         self.direction = direction
         self.cCenter = Coordinate(centerLat, centerLon)

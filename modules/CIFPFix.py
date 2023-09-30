@@ -2,7 +2,7 @@ from modules.CIFPFunctions import CIFPFunctions
 
 
 class CIFPFix:
-    def __init__(self, id, cifpLine):
+    def __init__(self, id: str, cifpLine: str):
         self.id = id
         self.lat = None
         self.lon = None

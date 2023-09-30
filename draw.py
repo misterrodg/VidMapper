@@ -11,7 +11,7 @@ def purgeNavData():
         fh.deleteAllInSubdir(".json", f"./navdata/{dir}")
 
 
-def processFacility(id):
+def processFacility(id: str):
     facility = Facility(id)
 
 

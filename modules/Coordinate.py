@@ -5,11 +5,21 @@ EARTH_RADIUS_NM = 3443.92
 
 
 class Coordinate:
-    def __init__(self, lat=0.0, lon=0.0):
+    def __init__(self, lat: float = 0.0, lon: float = 0.0):
         self.lat = lat
         self.lon = lon
 
-    def fromDMS(self, northSouth, latD, latM, latS, eastWest, lonD, lonM, lonS):
+    def fromDMS(
+        self,
+        northSouth: str,
+        latD: int,
+        latM: int,
+        latS: float,
+        eastWest: str,
+        lonD: int,
+        lonM: int,
+        lonS: float,
+    ):
         lat = latD + (latM / 60) + (latS / (60 * 60))
         if northSouth == "S":
             lat = -lat
@@ -19,7 +29,7 @@ class Coordinate:
         self.lat = lat
         self.lon = lon
 
-    def fromPBD(self, lat, lon, bearing, distance):
+    def fromPBD(self, lat: float, lon: float, bearing: float, distance: float):
         endLat = math.asin(
             math.sin(math.radians(lat)) * math.cos(distance / EARTH_RADIUS_NM)
             + math.cos(math.radians(lat))
@@ -36,7 +46,7 @@ class Coordinate:
         self.lat = math.degrees(endLat)
         self.lon = math.degrees(endLon)
 
-    def haversineGreatCicleDistance(self, endLat, endLon):
+    def haversineGreatCicleDistance(self, endLat: float, endLon: float):
         theta = self.lon - endLon
         arc = math.degrees(
             math.acos(
@@ -51,7 +61,7 @@ class Coordinate:
         distance = arc * DEG_TO_MIN
         return distance
 
-    def haversineGreatCircleBearing(self, endLat, endLon):
+    def haversineGreatCircleBearing(self, endLat: float, endLon: float):
         x = math.cos(math.radians(self.lat)) * math.sin(
             math.radians(endLat)
         ) - math.sin(math.radians(self.lat)) * math.cos(

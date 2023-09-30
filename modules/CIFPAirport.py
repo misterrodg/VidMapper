@@ -6,7 +6,7 @@ CIFP_RUNWAY_LINE = "G"
 
 
 class CIFPAirport:
-    def __init__(self, id, cifpLines):
+    def __init__(self, id: str, cifpLines: list):
         self.id = id
         self.lat = None
         self.lon = None
@@ -26,10 +26,10 @@ class CIFPAirport:
                 self.lon = coord.lon
                 self.magvar = cf.convertMagVar(line[51:56])
 
-    def findRunway(self, runwayId, runways):
+    def findRunway(self, runwayId: str, runways: list):
         return [runway for runway in runways if runway.get("id") == runwayId][0]
 
-    def invertRunwayId(self, runwayId):
+    def invertRunwayId(self, runwayId: str):
         inverseRunwayId = ""
         inverseRunwayPos = ""
         mainId = runwayId[2:4]
@@ -83,7 +83,7 @@ class CIFPAirport:
             pairedRunways.append(pairedRunway)
         self.pairedRunways = pairedRunways
 
-    def undisplaceThreshold(self, pairedRunway, displacement):
+    def undisplaceThreshold(self, pairedRunway: dict, displacement: float):
         FEET_IN_NM = 6076.12
         baseCoord = Coordinate(pairedRunway["baseLat"], pairedRunway["baseLon"])
         recipCoord = Coordinate(pairedRunway["recipLat"], pairedRunway["recipLon"])

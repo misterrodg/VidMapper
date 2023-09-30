@@ -2,7 +2,15 @@ from modules.Coordinate import Coordinate
 
 
 class CircleBarbs:
-    def __init__(self, lat, lon, barbs, length, radius, rotation=0):
+    def __init__(
+        self,
+        lat: float,
+        lon: float,
+        barbs: int,
+        length: float,
+        radius: float,
+        rotation: float = 0,
+    ):
         self.lat = lat
         self.lon = lon
         self.barbs = barbs

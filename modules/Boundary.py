@@ -7,7 +7,7 @@ BOUNDARY_DIR = "./boundaries"
 
 
 class Boundary:
-    def __init__(self, id):
+    def __init__(self, id: str):
         self.id = id
         self.filePath = f"{BOUNDARY_DIR}/{id}.json"
         self.featureArray = []

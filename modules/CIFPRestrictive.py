@@ -8,7 +8,7 @@ RHUMB_LINE = "H"
 
 
 class CIFPRestrictive:
-    def __init__(self, id, cifpLines):
+    def __init__(self, id: str, cifpLines: list):
         self.id = id
         self.definitions = []
         self.cifpLines = cifpLines
