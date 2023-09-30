@@ -181,6 +181,7 @@ class Facility:
             for fix in self.cifpFixes:
                 fixDefinition = self.findFixDefinition(fix["id"])
                 if fixDefinition != None:
+                    vors = self.checkForVORsInFix(fixDefinition)
                     fixData = Fix(self.magvar, fixDefinition, fix, vors)
                     fixData.drawFix()
                     if fixData.featureArray:
