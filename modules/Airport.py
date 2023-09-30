@@ -1,64 +1,50 @@
 from modules.Centerline import Centerline
 from modules.Circle import Circle
 from modules.CircleBarbs import CircleBarbs
-from modules.FileHandler import FileHandler
 from modules.Line import Line
-
-import json
-
-AIRPORT_DIR = "./navdata/airports"
 
 
 class Airport:
-    def __init__(self, magvar, airportObject):
+    def __init__(self, magvar: int, airportDefinition: dict, airportObject: dict):
         self.id = None
         self.magvar = magvar
         self.drawRunways = False
         self.drawCircle = True
         self.drawCricleBarbs = True
         self.centerlines = None
-        self.lat = None
-        self.lon = None
+        self.lat = 0
+        self.lon = 0
         self.runways = None
         self.pairedRunways = []
-        self.filePath = ""
         # Drawn Data
         self.featureArray = []
+        self.verifyAirportDefinition(airportDefinition)
         self.verifyAirportObject(airportObject)
-        self.getAirportData()
 
-    def verifyAirportObject(self, airportObject):
-        if airportObject:
-            if "id" in airportObject:
-                self.id = airportObject["id"]
-                self.filePath = f"{AIRPORT_DIR}/{self.id}.json"
-            if "runways" in airportObject:
-                self.drawRunways = airportObject["runways"]
-            if "symbol" in airportObject:
-                self.drawCircle = airportObject["symbol"]
-                self.drawCircleBarbs = airportObject["symbol"]
-            if "centerlines" in airportObject:
-                self.centerlines = airportObject["centerlines"]
+    def verifyAirportDefinition(self, airportDefinition: dict):
+        if "id" in airportDefinition:
+            self.id = airportDefinition["id"]
+        if "runways" in airportDefinition:
+            self.drawRunways = airportDefinition["runways"]
+        if "symbol" in airportDefinition:
+            self.drawCircle = airportDefinition["symbol"]
+            self.drawCircleBarbs = airportDefinition["symbol"]
+        if "centerlines" in airportDefinition:
+            self.centerlines = airportDefinition["centerlines"]
 
-    def getAirportData(self):
-        fh = FileHandler()
-        if fh.checkFile(self.filePath):
-            with open(self.filePath) as jsonFile:
-                airportData = json.load(jsonFile)
-                if "lat" in airportData:
-                    if type(airportData["lat"]) == float:
-                        self.lat = airportData["lat"]
-                if "lon" in airportData:
-                    if type(airportData["lon"]) == float:
-                        self.lon = airportData["lon"]
-                if "runways" in airportData:
-                    self.runways = airportData["runways"]
-                if "paired_runways" in airportData:
-                    self.pairedRunways = airportData["paired_runways"]
-                if not self.runways and not self.pairedRunways:
-                    self.drawRunways = False
-                    self.drawCircle = True
-                    self.drawCricleBarbs = True
+    def verifyAirportObject(self, airportObject: dict):
+        if "lat" in airportObject:
+            self.lat = airportObject["lat"]
+        if "lon" in airportObject:
+            self.lon = airportObject["lon"]
+        if "runways" in airportObject:
+            self.runways = airportObject["runways"]
+        if "paired_runways" in airportObject:
+            self.pairedRunways = airportObject["paired_runways"]
+        if not self.runways and not self.pairedRunways:
+            self.drawRunways = False
+            self.drawCircle = True
+            self.drawCricleBarbs = True
 
     def drawAirport(self):
         if self.lat and self.lon:

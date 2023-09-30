@@ -1,41 +1,31 @@
 from modules.Circle import Circle
-from modules.FileHandler import FileHandler
-
-import json
-
-VOR_DIR = "./navdata/vors"
 
 
 class VOR:
-    def __init__(self, magvar, vorObject):
+    def __init__(self, magvar: int, vorDefinition: dict, vorObject: dict):
         self.id = None
         self.magvar = magvar
         self.innerOnly = False
-        self.lat = None
-        self.lon = None
-        self.filePath = ""
+        self.lat = 0
+        self.lon = 0
         # Drawn Data
         self.featureArray = []
+        self.verifyVORDefinition(vorDefinition)
         self.verifyVORObject(vorObject)
-        self.getVORData()
 
-    def verifyVORObject(self, vorObject):
-        if vorObject:
-            if "id" in vorObject:
-                self.id = vorObject["id"]
-                self.filePath = f"{VOR_DIR}/{self.id}.json"
-            if "inner_only" in vorObject:
-                self.innerOnly = vorObject["inner_only"]
+    def verifyVORDefinition(self, vorDefinition: dict):
+        if "id" in vorDefinition:
+            self.id = vorDefinition["id"]
+        if "inner_only" in vorDefinition:
+            self.innerOnly = vorDefinition["inner_only"]
 
-    def getVORData(self):
-        fh = FileHandler()
-        if fh.checkFile(self.filePath):
-            with open(self.filePath) as jsonFile:
-                vorData = json.load(jsonFile)
-                if "lat" in vorData:
-                    self.lat = vorData["lat"]
-                if "lon" in vorData:
-                    self.lon = vorData["lon"]
+    def verifyVORObject(self, vorObject: dict):
+        if "id" in vorObject:
+            self.id = vorObject["id"]
+        if "lat" in vorObject:
+            self.lat = vorObject["lat"]
+        if "lon" in vorObject:
+            self.lon = vorObject["lon"]
 
     def drawVOR(self):
         SIDES = 24
