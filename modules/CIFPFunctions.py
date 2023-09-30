@@ -2,7 +2,7 @@ from modules.Coordinate import Coordinate
 
 
 class CIFPFunctions:
-    def convertDMS(self, cifpDMSSubstring):
+    def convertDMS(self, cifpDMSSubstring: str):
         latString = cifpDMSSubstring[0:9]
         lonString = cifpDMSSubstring[9:19]
         northSouth = latString[0:1]
@@ -17,7 +17,7 @@ class CIFPFunctions:
         coord.fromDMS(northSouth, latD, latM, latS, eastWest, lonD, lonM, lonS)
         return coord
 
-    def convertMagVar(self, cifpMagVarSubstring):
+    def convertMagVar(self, cifpMagVarSubstring: str):
         magVarValue = int(cifpMagVarSubstring[1:]) / 10
         if cifpMagVarSubstring[0:1] == "W":
             magVarValue = -magVarValue

@@ -6,12 +6,14 @@ import argparse
 
 def purgeNavData():
     fh = FileHandler()
-    dirs = ["airports", "fixes", "restrictive", "vors"]
+    dirs = ["restrictive"]
     for dir in dirs:
-        fh.deleteAllInSubdir(".json", f"./navdata/{dir}")
+        path = f"./navdata/{dir}"
+        if fh.checkPath(path):
+            fh.deleteAllInSubdir(".json", path)
 
 
-def processFacility(id):
+def processFacility(id: str):
     facility = Facility(id)
 
 

@@ -1,30 +1,27 @@
 from modules.Coordinate import Coordinate
 from modules.Line import Line
-from modules.VOR import VOR
 
 import math
 
 
 class Cross:
-    def __init__(self, lat, lon, length, defines):
+    def __init__(self, lat: float, lon: float, lineLength: float, defines: list):
         self.lat = lat
         self.lon = lon
-        self.length = length
+        self.lineLength = lineLength
         self.defines = defines
         self.featureArray = []
         self.draw()
 
     def draw(self):
-        for point in self.defines:
-            vorObject = {"id": point}
-            vor = VOR(0, vorObject)
-            if type(vor.lat) == float and type(vor.lon) == float:
+        for vor in self.defines:
+            if "id" in vor and "lat" in vor and "lon" in vor:
                 innerPoint = Coordinate(self.lat, self.lon)
                 outerPoint = Coordinate(self.lat, self.lon)
-                bearing = innerPoint.haversineGreatCircleBearing(vor.lat, vor.lon)
-                innerPoint.fromPBD(self.lat, self.lon, bearing, self.length * 0.5)
+                bearing = innerPoint.haversineGreatCircleBearing(vor["lat"], vor["lon"])
+                innerPoint.fromPBD(self.lat, self.lon, bearing, self.lineLength * 0.5)
                 bearing = math.fmod(bearing + 180, 360)
-                outerPoint.fromPBD(self.lat, self.lon, bearing, self.length * 0.5)
+                outerPoint.fromPBD(self.lat, self.lon, bearing, self.lineLength * 0.5)
                 line = Line(
                     innerPoint.lat, innerPoint.lon, outerPoint.lat, outerPoint.lon
                 )

@@ -1,5 +1,5 @@
 class Line:
-    def __init__(self, startLat, startLon, endLat, endLon):
+    def __init__(self, startLat: float, startLon: float, endLat: float, endLon: float):
         self.startLat = startLat
         self.startLon = startLon
         self.endLat = endLat

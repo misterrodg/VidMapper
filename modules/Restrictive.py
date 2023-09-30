@@ -1,7 +1,5 @@
 from modules.Arc import Arc
 from modules.Circle import Circle
-from modules.FileHandler import FileHandler
-from modules.Line import Line
 
 import json
 import math
@@ -10,27 +8,28 @@ CIRCLE_LINE_LENGTH = 0.349030413029316  # This is desired line length at an angl
 ARC_LINE_LENGTH = 1.74515206514658  # This is desired line length at an angle corresponding to 10* at 10NM
 DEGREES_IN_CIRCLE = 360
 
-RESTRICTIVE_DIR = "./navdata/restrictive"
+NAVDATA_DIR = "./navdata"
+RESTRICTIVE_DIR = f"{NAVDATA_DIR}/restrictive"
 
 
 class Restrictive:
-    def __init__(self, restId):
-        self.id = restId
-        self.filePath = f"{RESTRICTIVE_DIR}/{self.id}.json"
+    def __init__(self, restObject: dict):
+        self.id = None
+        self.filePath = ""
         self.definitionsArray = []
         # Drawn Data
         self.featureArray = []
-        self.getRestData()
+        self.verifyRestObject(restObject)
 
-    def getRestData(self):
-        fh = FileHandler()
-        if fh.checkFile(self.filePath):
-            with open(self.filePath) as jsonFile:
-                restData = json.load(jsonFile)
-                if "definitions" in restData:
-                    self.definitionsArray = restData["definitions"]
+    def verifyRestObject(self, restObject: dict):
+        print(restObject)
+        if "id" in restObject:
+            self.id = restObject["id"]
+            self.filePath = f"{RESTRICTIVE_DIR}/{self.id}.json"
+        if "definitions" in restObject:
+            self.definitionsArray = restObject["definitions"]
 
-    def drawCircle(self, typeObject):
+    def drawCircle(self, typeObject: dict):
         if "center" in typeObject and "distance" in typeObject:
             center = typeObject["center"]
             lat = float(center[0])
@@ -42,7 +41,7 @@ class Restrictive:
             circle = Circle(lat, lon, sides, dist)
             self.featureArray.append(circle.feature)
 
-    def drawArc(self, typeObject):
+    def drawArc(self, typeObject: dict):
         coordinates = []
         if (
             "direction" in typeObject
@@ -74,7 +73,7 @@ class Restrictive:
             coordinates = arc.coordinates
         return coordinates
 
-    def drawLine(self, typeObject):
+    def drawLine(self, typeObject: dict):
         result = None
         if "point" in typeObject:
             coord = typeObject["point"]
@@ -82,7 +81,7 @@ class Restrictive:
             result = [coord[1], coord[0]]
         return result
 
-    def drawDefinition(self, definition):
+    def drawDefinition(self, definition: dict):
         coordinates = []
         for item in definition:
             if "type" in item:
@@ -120,3 +119,8 @@ class Restrictive:
             if "definition" in definitions:
                 definition = definitions["definition"]
                 self.drawDefinition(definition)
+        self.toJsonFile()
+
+    def toJsonFile(self):
+        with open(self.filePath, "w") as jsonFile:
+            json.dump(self.featureArray, jsonFile)

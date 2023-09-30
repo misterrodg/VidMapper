@@ -9,68 +9,151 @@ from modules.VOR import VOR
 import json
 
 FACILITY_DIR = "./facilities"
-VIDMAP_DIR = f"{FACILITY_DIR}/vidmaps"
+NAVDATA_DIR = "./navdata"
+VIDMAP_DIR = "./vidmaps"
+RESTRICTIVE_DIR = f"{NAVDATA_DIR}/restrictive"
 
 
 class Facility:
-    def __init__(self, id):
+    def __init__(self, id: str):
         self.id = id
-        self.magvar = None
+        self.magvar = 0
         self.airports = []
+        self.airportIds = []
+        self.cifpAirports = []
         self.fixes = []
+        self.fixIds = []
+        self.cifpFixes = []
         self.vors = []
-        self.definedBy = []
-        self.frds = []
+        self.vorIds = []
+        self.cifpVORs = []
         self.restrictive = []
+        self.restrictiveIds = []
+        self.cifpRestrictive = []
         self.filePath = f"{FACILITY_DIR}/{id}.json"
         self.vidmapPath = f"{VIDMAP_DIR}/{id}.geojson"
         self.featureArray = []
-        if self.checkForCifp():
-            self.getFacilityData()
-            self.checkBoundaries()
-            self.checkAirports()
-            self.checkVORs()
-            self.checkFixes()
-            self.checkRestrictive()
-            self.toJsonFile(self.vidmapPath)
+        self.getFacilityData()
+        self.getCIFPData()
+        self.drawFacilityData()
+        self.toJsonFile(self.vidmapPath)
 
-    def checkForCifp(self):
-        cf = CIFP()
-        return cf.checkForFile()
+    def setMagVar(self, facilityData: dict):
+        if "magvar" in facilityData:
+            self.magvar = facilityData["magvar"]
+
+    def setAirports(self, facilityData: dict):
+        if "airports" in facilityData:
+            self.airports = facilityData["airports"]
+            for airport in facilityData["airports"]:
+                if "id" in airport:
+                    self.airportIds.append(airport["id"])
+
+    def setFixes(self, facilityData: dict):
+        if "fixes" in facilityData:
+            self.fixes = facilityData["fixes"]
+            for fix in facilityData["fixes"]:
+                if "id" in fix and "/" not in fix:
+                    self.fixIds.append(fix["id"])
+                if "defined_by" in fix:
+                    for vor in fix["defined_by"]:
+                        self.vorIds.append(vor)
+                if "frd_point" in fix:
+                    defineArray = fix["frd_point"].split("/")
+                    vor = defineArray[0]
+                    self.vorIds.append(vor)
+
+    def setVORs(self, facilityData: dict):
+        if "vors" in facilityData:
+            self.vors = facilityData["vors"]
+            for vor in facilityData["vors"]:
+                if "id" in vor:
+                    self.vorIds.append(vor["id"])
+
+    def setRestrictive(self, facilityData: dict):
+        fh = FileHandler()
+        if "restrictive" in facilityData:
+            self.restrictive = facilityData["restrictive"]
+            for restrictive in facilityData["restrictive"]:
+                restFilePath = f"{RESTRICTIVE_DIR}/{restrictive}.json"
+                if fh.checkFile(restFilePath):
+                    with open(restFilePath) as restFile:
+                        restData = json.load(restFile)
+                        for feature in restData:
+                            self.featureArray.append(feature)
+                else:
+                    self.restrictiveIds.append(restrictive)
 
     def getFacilityData(self):
         fh = FileHandler()
+        fh.checkDir(RESTRICTIVE_DIR)
         if fh.checkFile(self.filePath):
             with open(self.filePath) as jsonFile:
                 facilityData = json.load(jsonFile)
-                if "magvar" in facilityData:
-                    self.magvar = facilityData["magvar"]
-                if "airports" in facilityData:
-                    self.airports = facilityData["airports"]
-                if "fixes" in facilityData:
-                    self.fixes = facilityData["fixes"]
-                    for fix in facilityData["fixes"]:
-                        if "defined_by" in fix:
-                            for vor in fix["defined_by"]:
-                                vorObject = {"id": vor}
-                                self.definedBy.append(vorObject)
-                        if "frd_point" in fix:
-                            defineArray = fix["frd_point"].split("/")
-                            vor = {"id": defineArray[0]}
-                            self.frds.append(vor)
-
-                if "vors" in facilityData:
-                    self.vors = facilityData["vors"]
-                if "restrictive" in facilityData:
-                    self.restrictive = facilityData["restrictive"]
+                self.setMagVar(facilityData)
+                self.setAirports(facilityData)
+                self.setFixes(facilityData)
+                self.setVORs(facilityData)
+                self.setRestrictive(facilityData)
         else:
             print(f"Cannot find the {self.id} facility file.")
             print(
                 f"Follow the README to create the {self.id} facility file in {FACILITY_DIR}"
             )
 
-    def checkBoundaries(self):
-        self.drawBoundaries()
+    def getCIFPData(self):
+        cf = CIFP(self.airportIds, self.fixIds, self.vorIds, self.restrictiveIds)
+        self.cifpAirports = cf.processAirportLines()
+        self.cifpFixes = cf.processFixLines()
+        self.cifpVORs = cf.processVORLines()
+        self.cifpRestrictive = cf.processRestrictiveLines()
+
+    def findAirportDefinition(self, airportId: str):
+        result = None
+        if self.airports:
+            for airport in self.airports:
+                if "id" in airport and airport["id"] == airportId:
+                    result = airport
+        return result
+
+    def findVORDefinition(self, vorId: str):
+        result = None
+        if self.vors:
+            for vor in self.vors:
+                if "id" in vor and vor["id"] == vorId:
+                    result = vor
+        return result
+
+    def findCIFPVOR(self, vorId: str):
+        result = None
+        if self.cifpVORs:
+            for vor in self.cifpVORs:
+                if vor["id"] == vorId:
+                    result = vor
+        return result
+
+    def checkForVORsInFix(self, fix: dict):
+        result = []
+        vors = []
+        if "defined_by" in fix:
+            for vor in fix["defined_by"]:
+                vors.append(vor)
+        if "frd_point" in fix:
+            defineArray = fix["frd_point"].split("/")
+            vor = defineArray[0]
+            vors.append(vor)
+        for vor in vors:
+            cifpVOR = self.findCIFPVOR(vor)
+            result.append(cifpVOR)
+        return result
+
+    def findFixDefinition(self, fixId: str):
+        result = None
+        if self.fixes:
+            for fix in self.fixes:
+                if "id" in fix and fix["id"] == fixId:
+                    result = fix
+        return result
 
     def drawBoundaries(self):
         boundaryData = Boundary(self.id)
@@ -78,85 +161,57 @@ class Facility:
             for feature in boundaryData.featureArray:
                 self.featureArray.append(feature)
 
-    def checkAirports(self):
-        cf = CIFP()
-        if self.airports:
-            airportIds = []
-            for airport in self.airports:
-                airportIds.append(airport["id"])
-            cf.checkForAirports(airportIds)
-            self.drawAirports()
-
     def drawAirports(self):
-        if self.airports:
-            for airport in self.airports:
-                airportData = Airport(self.magvar, airport)
-                airportData.drawAirport()
-                if airportData.featureArray:
-                    for feature in airportData.featureArray:
-                        self.featureArray.append(feature)
-
-    def checkFixes(self):
-        cf = CIFP()
-        if self.fixes:
-            fixIds = []
-            for fix in self.fixes:
-                fixIds.append(fix["id"])
-            cf.checkForFixes(fixIds)
-            self.drawFixes()
+        if self.cifpAirports:
+            for airport in self.cifpAirports:
+                airportDefinition = self.findAirportDefinition(airport["id"])
+                if airportDefinition != None:
+                    airportData = Airport(self.magvar, airportDefinition, airport)
+                    airportData.drawAirport()
+                    if airportData.featureArray:
+                        for feature in airportData.featureArray:
+                            self.featureArray.append(feature)
 
     def drawFixes(self):
-        if self.fixes:
-            for fix in self.fixes:
-                fixData = Fix(self.magvar, fix)
-                fixData.drawFix()
-                if fixData.featureArray:
-                    for feature in fixData.featureArray:
-                        self.featureArray.append(feature)
-
-    def checkVORs(self):
-        cf = CIFP()
-        if self.vors:
-            vorIds = []
-            for vor in self.vors:
-                vorIds.append(vor["id"])
-            for vor in self.definedBy:
-                vorIds.append(vor["id"])
-            for vor in self.frds:
-                vorIds.append(vor["id"])
-            cf.checkForVORs(vorIds)
-            self.drawVORs()
+        if self.cifpFixes:
+            for fix in self.cifpFixes:
+                vors = self.checkForVORsInFix(fix)
+                fixDefinition = self.findFixDefinition(fix["id"])
+                if fixDefinition != None:
+                    fixData = Fix(self.magvar, fixDefinition, fix, vors)
+                    fixData.drawFix()
+                    if fixData.featureArray:
+                        for feature in fixData.featureArray:
+                            self.featureArray.append(feature)
 
     def drawVORs(self):
-        if self.vors:
-            for vor in self.vors:
-                vorData = VOR(self.magvar, vor)
-                vorData.drawVOR()
-                if vorData.featureArray:
-                    for feature in vorData.featureArray:
-                        self.featureArray.append(feature)
-
-    def checkRestrictive(self):
-        cf = CIFP()
-        if self.restrictive:
-            restIds = []
-            for rest in self.restrictive:
-                restIds.append(rest)
-            cf.checkForRestrictive(restIds)
-            self.drawRestrictive()
+        if self.cifpVORs:
+            for vor in self.cifpVORs:
+                vorDefinition = self.findVORDefinition(vor["id"])
+                if vorDefinition != None:
+                    vorData = VOR(self.magvar, vorDefinition, vor)
+                    vorData.drawVOR()
+                    if vorData.featureArray:
+                        for feature in vorData.featureArray:
+                            self.featureArray.append(feature)
 
     def drawRestrictive(self):
-        if self.restrictive:
-            for rest in self.restrictive:
+        if self.cifpRestrictive:
+            for rest in self.cifpRestrictive:
                 restData = Restrictive(rest)
                 restData.drawRestrictive()
                 if restData.featureArray:
                     for feature in restData.featureArray:
                         self.featureArray.append(feature)
 
-    def toJsonFile(self, filePath):
-        fh = FileHandler()
-        fh.checkDir(VIDMAP_DIR)
+    def drawFacilityData(self):
+        self.drawBoundaries()
+        self.drawAirports()
+        self.drawVORs()
+        self.drawFixes()
+        self.drawRestrictive()
+
+    def toJsonFile(self, filePath: str):
         jsonData = {"type": "FeatureCollection", "features": self.featureArray}
         with open(filePath, "w") as jsonFile:
             json.dump(jsonData, jsonFile)

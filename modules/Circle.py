@@ -2,7 +2,9 @@ from modules.Coordinate import Coordinate
 
 
 class Circle:
-    def __init__(self, lat, lon, sides, radius, rotation=0):
+    def __init__(
+        self, lat: float, lon: float, sides: int, radius: float, rotation: float = 0
+    ):
         self.lat = lat
         self.lon = lon
         self.sides = sides

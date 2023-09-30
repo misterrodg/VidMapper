@@ -1,10 +1,8 @@
 from modules.CIFPFunctions import CIFPFunctions
 
-import json
-
 
 class CIFPFix:
-    def __init__(self, id, cifpLine):
+    def __init__(self, id: str, cifpLine: str):
         self.id = id
         self.lat = None
         self.lon = None
@@ -19,7 +17,6 @@ class CIFPFix:
         self.lon = coord.lon
         self.magvar = cf.convertMagVar(self.cifpLine[74:79])
 
-    def toJsonFile(self, filePath):
+    def toDict(self):
         del self.cifpLine
-        with open(filePath, "w") as jsonFile:
-            json.dump(self.__dict__, jsonFile)
+        return self.__dict__

@@ -4,7 +4,9 @@ from modules.Line import Line
 
 
 class Centerline:
-    def __init__(self, runwayId, pairedRunways, length, crossbars):
+    def __init__(
+        self, runwayId: str, pairedRunways: list, length: int, crossbars: list
+    ):
         self.runwayId = runwayId
         self.pairedRunways = pairedRunways
         self.length = length
