@@ -53,5 +53,6 @@
     { "id": "QQQ" },
     { "id": "ZZZ" }
   ],
-  "restrictive": ["MOAZZ", "P9999", "R1"]
+  "restrictive": ["MOAZZ", "P9999", "R1"],
+  "boundary": false
 }

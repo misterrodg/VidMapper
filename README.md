@@ -10,13 +10,14 @@ If you would like to test your maps prior to loading them into [vNAS Data Admin]
 
 ## Requirements
 
-Python3.8 or Later (Tested with Python 3.10.12)
+- Python3.8 or Later (Tested with Python 3.10.12)
+- `cifparse` - install with `pip install cifparse`
 
 # Instructions for Use
 
 First, download the [FAA CIFP](https://www.faa.gov/air_traffic/flight_info/aeronav/digital_products/cifp/download/) zip file. Copy the `FAACIFP18` file from the zip into the `./navdata` directory.
 
-Next, create a facility file in the `./facilities` directory with the name of the facility you will be creating. For example, if you are creating a facility for Dover RAPCON, the facility file would be `DOV.json`. If the facility ID matches the ID from the [Simaware TRACON Project](https://github.com/vatsimnetwork/simaware-tracon-project/tree/main/Boundaries), it will automatically add it to your videomap. The facility file defines what should be drawn into the map.
+Next, create a facility file in the `./facilities` directory with the name of the facility you will be creating. For example, if you are creating a facility for Dover RAPCON, the facility file would be `DOV.json`. If the facility ID matches the ID from the [Simaware TRACON Project](https://github.com/vatsimnetwork/simaware-tracon-project/tree/main/Boundaries), it will cache the data and make it available for your videomaps. The facility file defines what should be drawn into the map.
 
 ## Facility File Format
 
@@ -30,6 +31,7 @@ The facility json file has the following properties, with the properties marked 
 - `fixes`: An array of fix objects. These print as crossed lines, a triangle, or an RNAV point symbol (four-pointed star) at the fix location.
 - `vors`: An array of VOR objects.
 - `restrictive`: An array of restrictive (Alert, Caution, Danger, MOA, Prohibited, Restricted, Training, Warning) airspace names.
+- `boundary`: A boolean for displaying the TRACON boundary.
 
 ### Airport Objects
 
