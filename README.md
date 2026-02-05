@@ -4,6 +4,8 @@ A simple Python-based VidMap draw tool for use with [vNAS](https://virtualnas.ne
 
 It is designed to be a stopgap for any facilities that do not have available vidmap data, or low traffic facilities that might not merit a FOIA request.
 
+If you are looking for a tool for drawing individual maps of procedures, airspace, or other NAS features, see [FacilityMapper](https://github.com/misterrodg/FacilityMapper).
+
 ## Testing Note
 
 If you would like to test your maps prior to loading them into [vNAS Data Admin](https://data-admin.virtualnas.net/login), [GeoJSON.io](https://geojson.io) is a great tool.
